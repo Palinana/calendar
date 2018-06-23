@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './CalendarFrontEnd/index.js', 
+    entry: './CalendarFrontEnd/app.js', 
     mode: 'development',
     output: {
       path: __dirname,
