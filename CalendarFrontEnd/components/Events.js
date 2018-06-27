@@ -19,7 +19,7 @@ class Events extends Component {
         let end = dateFns.format(e.endTime, 'h:mm a')
         return (
           <div className="event-list" key={idx}>
-            {`${start}-${end}`} <strong>{e.description}</strong>
+            {`${start}-${end}`} <strong> - {e.description} </strong>
           </div>
          )
     })

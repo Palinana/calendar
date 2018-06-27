@@ -43,7 +43,7 @@ class EventForm extends Component {
         date: this.props.selectedDate
       }
 
-      this.props.onAddEvent(body);
+      this.props.addEvent(body);
       this.setState({
           startTime: '', 
           endTime: '', 
@@ -73,33 +73,57 @@ class EventForm extends Component {
       return Number(minutes)
     }
   }
+  renderEvents(events) {
+    let formattedDay = dateFns.format(this.props.selectedDate, 'MM-DD-YYYY');
+      let daysEvents = this.props.allEvents.filter(event => {
+        let formattedEventDay = dateFns.format(event.date, 'MM-DD-YYYY')
+        return formattedDay === formattedEventDay
+      })
+
+      if (!daysEvents.length) {
+        return <div className="no-events">No events for today</div>
+       } else {
+        return daysEvents.map((e,idx) => {
+          let start = dateFns.format(e.startTime, 'h:mm a')
+          let end = dateFns.format(e.endTime, 'h:mm a')
+          return (
+            <div className="events-list" key={idx}>
+              {`${start}-${end}`} <strong> - {e.description}  </strong>
+              <Link to={`/event/delete/${e.id}`} onClick={() => this.props.deleteEvent(e.id)} className="edit-link">delete</Link>
+            </div>
+          )
+        })
+       }  
+  }
 
 
     render() {
       const {startTime, endTime} = this.state;
       const {hideForm} = this.props;
-        return (
-          <div className="form-container">
-              <div className="form-content">
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label>Start Time</label>
-                        <input name="startTime" type="time" onChange={this.handleChange} />
-                    </div>
-                    <div>
-                        <label>End Time</label>
-                        <input name="endTime" type="time" onChange={this.handleChange} />
-                    </div>
-                    <div>
-                        <label>Description</label>
-                        <input name="description" type="text" onChange={this.handleChange} />
-                    </div>
-                    <button type="submit" disabled={startTime >= endTime}>Add</button>
-                    <button onClick={hideForm}>Cancel</button>
-                </form>
-                </div>
-            </div>
-        )
+    
+      return (
+        <div className="form-container">
+            <div className="form-content">
+              <div>{this.renderEvents(this.props.allEvents)}</div>
+              <form onSubmit={this.handleSubmit}>
+                  <div>
+                      <label>Start Time</label>
+                      <input name="startTime" type="time" onChange={this.handleChange} />
+                  </div>
+                  <div>
+                      <label>End Time</label>
+                      <input name="endTime" type="time" onChange={this.handleChange} />
+                  </div>
+                  <div>
+                      <label>Description</label>
+                      <input name="description" type="text" onChange={this.handleChange} />
+                  </div>
+                  <button type="submit" disabled={startTime >= endTime}>Add</button>
+                  <Link to='/events'><button onClick={hideForm}>Exit</button></Link>
+              </form>
+              </div>
+          </div>
+      )
     }
 }
 
@@ -110,10 +134,10 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddEvent(body) {
+    addEvent(body) {
       dispatch(postEvent(body))
     },
-    onDeleteEvent(id) {
+    deleteEvent(id) {
       dispatch(deleteEventThunk(id))
     }
   }
