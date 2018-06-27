@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = require('./db');
+const db = require('../db');
 
 const Event = db.define('event', {
   startTime: {
@@ -10,6 +10,10 @@ const Event = db.define('event', {
   },
   description: {
     type: Sequelize.STRING
+  },
+  date: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 })
 
