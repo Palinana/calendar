@@ -89,7 +89,6 @@ class Calendar extends Component{
     
             const dayCopy = day;
             const dayEvents = this.getEventsForDay(day, allEvents);
-            console.log("All events ", dayEvents )
 
             days.push(
               <div className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : dateFns.isSameDay(day, selectedDate) ? "selected" : ''}`} key={day} onClick={() => this.onDateClick(dateFns.parse(dayCopy))}>

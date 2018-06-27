@@ -83,6 +83,15 @@ const initialState = {
   export const deleteEventThunk = (eventId) => {
     return (dispatch) => {
       axios.delete(`/api/events/delete/${eventId}`)
+      .then(res => {
+        return axios.get('/api/events')
+        })
+      .then(res => res.data)
+      .then(events => {
+        dispatch(getAllEvents(events));
+
+      })
+
       .then(() => dispatch(deleteEvent(eventId)))
       .catch(err => console.error(err))
     }

@@ -181,3 +181,13 @@ body{
     background: white;
     padding: 2em;
 }
+.no-events{
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 75px;
+}
+.events-list{
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 44px;
+}
