@@ -9,29 +9,20 @@ class Calendar extends Component{
     constructor (props) {
         super(props);
         this.state = {
-            // today: new Date(),
             currentMonth: new Date(),
             selectedDate: new Date(),
-            showPopup: false,
             showForm: false,
     }
       this.onDateClick = this.onDateClick.bind(this);
       this.hideForm = this.hideForm.bind(this);
       this.nextMonth = this.nextMonth.bind(this);
       this.prevMonth = this.prevMonth.bind(this);
-      this.togglePopup = this.togglePopup.bind(this);
     }
       
     componentDidMount() {
         this.props.loadAllEvents();
     }
-    //   getEventsForDay(theDay, allEvents) {
-    //     let formattedDay = dateFns.format(theDay, 'MM-DD-YYYY')
-    //     return allEvents.filter(event => {
-    //       let formattedEvent = dateFns.format(event.date, 'MM-DD-YYYY')
-    //       return formattedEvent === formattedDay
-    //     })
-    //   }
+    
     renderHeader() {
         const dateFormat = "MMMM YYYY";
         return (
@@ -56,7 +47,6 @@ class Calendar extends Component{
     renderDays() {
         const dateFormat = "dddd";
         const days = [];
-    
         let startDate = dateFns.startOfWeek(this.state.currentMonth)
     
         for (let i = 0; i < 7; i++) {
@@ -66,8 +56,16 @@ class Calendar extends Component{
             </div>
           )
         }
-    
         return <div className="days row">{days}</div>
+    }
+
+    getEventsForDay(theDay, allEvents) {
+        var tempArr = [];
+        Object.keys(allEvents).map((e,idx) => {
+            var item = allEvents[e];
+            tempArr.push(item)
+        })
+        return tempArr;
     }
       
     renderCells(allEvents) {
@@ -79,37 +77,24 @@ class Calendar extends Component{
         const endDate = dateFns.endOfWeek(monthEnd);
         const dateFormat = "D";
         const rows = [];
-    
         let days = [];
         let day = startDate;
         let formattedDate = "";
         let formattedEventsDate = "";
-        let matchedEvents = [];
-
-        console.log("All events ", allEvents )
    
         while (day <= endDate) {
           for (let i = 0; i < 7; i++) {
             formattedDate = dateFns.format(day, dateFormat);
             formattedEventsDate = dateFns.format(day, 'MM DD YYYY');
     
-            const cloneDay = day;
-            
-            // let formattedDay = dateFns.format(day, 'MM-DD-YYYY')
-            // console.log("Events!!!!!  ", allEvents )
-
-            // const dayEvents = allEvents.filter(event => {
-            //       let formattedEvent = dateFns.format(event.date, 'MM-DD-YYYY')
-            //       return formattedEvent === formattedDay
-            //     })
-            
-            // console.log("dayEvents!!!!!  ", dayEvents )
-            // const dayEvents = this.getEventsForDay(day, allEvents);
+            const dayCopy = day;
+            const dayEvents = this.getEventsForDay(day, allEvents);
+            console.log("All events ", dayEvents )
 
             days.push(
-              <div className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : dateFns.isSameDay(day, selectedDate) ? "selected" : ''}`} key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
+              <div className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : dateFns.isSameDay(day, selectedDate) ? "selected" : ''}`} key={day} onClick={() => this.onDateClick(dateFns.parse(dayCopy))}>
               <span>{formattedDate}</span>
-              {/* <Events dayEvents={allEvents}/> */}
+              <Events dayEvents={allEvents} day={day}/>
               </div>
             )
             day = dateFns.addDays(day, 1);
@@ -121,7 +106,6 @@ class Calendar extends Component{
           )
           days = [];
         }
-    
         return <div className="body">{rows}</div>
     }
 
@@ -142,12 +126,7 @@ class Calendar extends Component{
         })
 
     } 
-    togglePopup() {
-        this.setState({
-          showPopup: !this.state.showPopup
-        })
-    }
-
+    
     onDateClick(day) {
         this.setState({
           selectedDate: day
