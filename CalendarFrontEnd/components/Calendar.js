@@ -160,7 +160,7 @@ class Calendar extends Component{
             <div className="calendar">
                 {this.renderHeader()}
                 {this.renderDays()}
-                {this.renderCells(this.props.events)}
+                {this.renderCells(this.props.allEvents)}
                 {this.state.showForm ? <EventForm hideForm={this.hideForm} selectedDate={this.state.selectedDate} />: ''}
             </div>
         )
@@ -169,7 +169,7 @@ class Calendar extends Component{
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        events: state.events
+        allEvents: state.events
     };
 };
   
@@ -177,7 +177,7 @@ const mapDispatchToProps = dispatch => {
     return {
         loadAllEvents: function() {
             dispatch(getEvents())
-          }
+        }
     };
 };
 
