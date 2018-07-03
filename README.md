@@ -21,3 +21,4 @@ Node.js with PostgreSQL and Sequelize
   Able to scroll down event for a day.  
   Update works on the Back-end  
 
+![image](https://user-images.githubusercontent.com/26104823/42193615-8be1da9e-7e3d-11e8-8213-1e6b67e9f35e.png)
